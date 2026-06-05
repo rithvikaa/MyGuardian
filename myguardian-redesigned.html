@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MyGuardian, your personal wellness companion.">
+  <title>MyGuardian | Your wellness, my priority</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111b3c;
+      --muted: #65708e;
+      --purple: #793eff;
+      --purple-2: #a567ff;
+      --pink: #e26daf;
+      --blue: #50aaf2;
+      --card: rgba(255, 255, 255, .72);
+      --line: rgba(95, 73, 180, .12);
+      --shadow: 0 20px 60px rgba(91, 58, 184, .12);
+      --page: #fcfbff;
+    }
+
+    [data-theme="dark"] {
+      --ink: #f7f3ff;
+      --muted: #b7b0cc;
+      --card: rgba(30, 22, 54, .76);
+      --line: rgba(205, 188, 255, .16);
+      --page: #100b1e;
+      --shadow: 0 20px 60px rgba(0, 0, 0, .32);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: "DM Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, a { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .skip-link {
+      position: fixed; left: 16px; top: -60px; z-index: 1000;
+      padding: 10px 18px; border-radius: 999px; color: #fff; background: var(--purple);
+    }
+    .skip-link:focus { top: 14px; }
+
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      height: 88px;
+      background: rgba(255,255,255,.9);
+      border-bottom: 1px solid rgba(95, 73, 180, .08);
+      backdrop-filter: blur(22px);
+    }
+    [data-theme="dark"] .nav { background: rgba(16,11,30,.86); }
+    .nav-inner {
+      width: min(1200px, calc(100% - 48px)); height: 100%; margin: auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 26px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-mark {
+      width: 48px; height: 48px; border-radius: 16px;
+      display: grid; place-items: center;
+      background: linear-gradient(145deg, #ff5c5e, #ffadb1);
+      box-shadow: 0 7px 18px rgba(255, 91, 100, .24);
+    }
+    .brand-face {
+      position: relative; width: 35px; height: 26px; border-radius: 50%;
+      background: linear-gradient(#fff, #e9edf1);
+      box-shadow: inset 0 -4px 6px rgba(80,88,100,.16);
+    }
+    .brand-face::before, .brand-face::after {
+      content: ""; position: absolute; top: 10px; width: 5px; height: 5px;
+      border-radius: 50%; background: #151515;
+    }
+    .brand-face::before { left: 7px; }
+    .brand-face::after { right: 7px; }
+    .face-line {
+      position: absolute; left: 10px; right: 10px; top: 12px;
+      height: 2px; background: #151515;
+    }
+    .brand-name {
+      font: 700 25px/1 "Playfair Display", serif;
+      letter-spacing: -.5px;
+    }
+    .nav-links { display: flex; align-items: stretch; gap: 30px; height: 100%; }
+    .nav-links a {
+      position: relative; display: grid; place-items: center;
+      color: #46506e; font-size: 14px; font-weight: 500;
+    }
+    [data-theme="dark"] .nav-links a { color: #d3cae8; }
+    .nav-links a:hover, .nav-links a.active { color: var(--purple); }
+    .nav-links a.active::after {
+      content: ""; position: absolute; bottom: 18px;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--purple);
+    }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .theme-switch {
+      width: 56px; height: 30px; border: 1px solid var(--line); border-radius: 999px;
+      padding: 3px; background: rgba(243,241,250,.9); cursor: pointer;
+    }
+    .theme-switch span {
+      display: block; width: 22px; height: 22px; margin-left: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #b177ff, #7638ee);
+      box-shadow: 0 3px 10px rgba(118,56,238,.3); transition: .25s;
+    }
+    [data-theme="dark"] .theme-switch span { margin-left: 0; }
+    .moon-button {
+      border: 0; background: transparent; color: #abb0c1; font-size: 19px; cursor: pointer;
+    }
+    .access-button {
+      display: flex; gap: 9px; align-items: center;
+      padding: 11px 16px; border: 1px solid var(--line); border-radius: 13px;
+      background: rgba(255,255,255,.5); cursor: pointer;
+    }
+    .access-icon {
+      display: grid; place-items: center; width: 20px; height: 20px;
+      border-radius: 5px; color: white; background: linear-gradient(135deg, #bd78ff, #7940ee);
+    }
+    .hamburger { display: none; border: 0; background: transparent; font-size: 25px; cursor: pointer; }
+
+    .hero {
+      position: relative; min-height: 736px; overflow: hidden;
+      background:
+        radial-gradient(circle at 21% 74%, rgba(245,116,209,.27), transparent 20%),
+        radial-gradient(circle at 75% 55%, rgba(142,111,255,.18), transparent 31%),
+        linear-gradient(115deg, #fbfcff 0%, #f7f2ff 55%, #fff0f6 100%);
+    }
+    [data-theme="dark"] .hero {
+      background:
+        radial-gradient(circle at 21% 74%, rgba(199,65,158,.22), transparent 20%),
+        radial-gradient(circle at 75% 55%, rgba(101,65,210,.25), transparent 31%),
+        linear-gradient(115deg, #120d22, #1a102d 55%, #241020);
+    }
+    .hero::before, .hero::after {
+      content: ""; position: absolute; border-radius: 50%; filter: blur(2px);
+      background: rgba(255,255,255,.66);
+    }
+    .hero::before { width: 390px; height: 390px; left: -180px; bottom: -200px; }
+    .hero::after { width: 450px; height: 450px; right: -220px; top: 45px; }
+    .hero-grid {
+      position: relative; z-index: 2;
+      width: min(1200px, calc(100% - 48px)); margin: auto; padding: 64px 0 42px;
+      display: grid; grid-template-columns: 1.04fr .96fr; gap: 68px; align-items: start;
+    }
+    .hero-copy { position: relative; padding-top: 13px; }
+    .eyebrow {
+      display: inline-flex; gap: 9px; align-items: center;
+      padding: 8px 15px; border-radius: 999px;
+      color: #8950e9; background: rgba(238,223,255,.72); font-size: 14px;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: #984cf1; }
+    h1 {
+      max-width: 570px; margin: 28px 0 20px;
+      font: 700 clamp(52px, 5vw, 72px)/1.05 "Playfair Display", serif;
+      letter-spacing: -2.5px;
+    }
+    .gradient-line {
+      display: block; color: transparent;
+      background: linear-gradient(90deg, #ac63f3, #7236f0);
+      background-clip: text; -webkit-background-clip: text;
+    }
+    .heart-outline {
+      display: inline-block; color: #e16cab; font: 500 .8em/1 "DM Sans", sans-serif;
+      transform: translateY(-2px);
+    }
+    .lead {
+      max-width: 515px; margin: 0; color: var(--muted);
+      font-size: 18px; line-height: 1.78;
+    }
+    .hero-buttons { display: flex; gap: 22px; margin-top: 28px; }
+    .btn {
+      min-height: 58px; padding: 0 30px; border-radius: 999px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 11px;
+      border: 1px solid var(--line); font-weight: 600; transition: .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      min-width: 236px; color: white; border: 0;
+      background: linear-gradient(100deg, #7538ef, #a047ff);
+      box-shadow: 0 12px 28px rgba(119,55,239,.28);
+    }
+    .btn-secondary { min-width: 172px; background: rgba(255,255,255,.76); }
+    [data-theme="dark"] .btn-secondary { background: rgba(34,25,58,.8); }
+    .play {
+      display: grid; place-items: center; width: 21px; height: 21px;
+      border-radius: 50%; color: #7c819a; background: #eef0f6; font-size: 9px;
+    }
+
+    .guardian {
+      position: absolute; left: 76px; bottom: -270px; width: 330px; height: 360px;
+      filter: drop-shadow(0 20px 25px rgba(70,51,117,.14));
+    }
+    .g-head {
+      position: absolute; z-index: 3; left: 91px; top: 0; width: 151px; height: 111px;
+      border-radius: 52% 52% 48% 48%;
+      background: linear-gradient(145deg, #fff, #e8e7e9);
+      box-shadow: inset -7px -8px 15px rgba(106,99,115,.1);
+    }
+    .g-eye { position: absolute; top: 49px; width: 17px; height: 17px; border-radius: 50%; background: #161616; }
+    .g-eye.left { left: 37px; } .g-eye.right { right: 37px; }
+    .g-line { position: absolute; top: 57px; left: 52px; width: 47px; height: 3px; background: #171717; }
+    .g-body {
+      position: absolute; left: 48px; top: 87px; width: 236px; height: 280px;
+      border-radius: 48% 48% 40% 40%;
+      background: linear-gradient(145deg, #fff, #ecebec);
+      box-shadow: inset -18px -10px 22px rgba(95,87,100,.08);
+    }
+    .g-heart {
+      position: absolute; right: 40px; top: 118px; color: #dedbdd; font-size: 45px;
+      text-shadow: 0 2px 2px #fff;
+    }
+    .g-arm {
+      position: absolute; z-index: 4; width: 75px; height: 188px;
+      border-radius: 48px; background: linear-gradient(145deg, #fff, #e8e7e9);
+    }
+    .g-arm.wave { left: 18px; top: 99px; transform: rotate(14deg); transform-origin: bottom; }
+    .g-arm.wave::before {
+      content: ""; position: absolute; left: 12px; top: -34px; width: 23px; height: 62px;
+      border-radius: 16px; background: #fbfafb; box-shadow: 17px -6px 0 #f8f7f8, 34px 2px 0 #f3f2f3;
+    }
+    .g-arm.side { right: 15px; top: 117px; transform: rotate(-12deg); z-index: 1; }
+    .spark { position: absolute; color: white; text-shadow: 0 0 14px #ad79ff; font-size: 28px; }
+    .spark.s1 { left: 498px; top: 430px; } .spark.s2 { left: 448px; top: 552px; }
+    .spark.s3 { left: 554px; top: 497px; font-size: 22px; }
+
+    .wellness-panel {
+      min-height: 608px; padding: 30px; border-radius: 40px;
+      background: rgba(255,255,255,.43); border: 1px solid rgba(255,255,255,.72);
+      box-shadow: inset 0 0 0 1px rgba(120,91,196,.04), var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    [data-theme="dark"] .wellness-panel { background: rgba(31,23,51,.48); }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 27px; }
+    .panel-heading h2 { margin: 0; font: 700 20px "Playfair Display", serif; }
+    .panel-date { color: #7d85a0; font-size: 14px; }
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+    .metric-card {
+      min-height: 218px; padding: 24px 21px; border-radius: 20px;
+      background: rgba(255,255,255,.65); border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 8px 26px rgba(88,65,147,.05);
+    }
+    [data-theme="dark"] .metric-card, [data-theme="dark"] .mood-card, [data-theme="dark"] .message-card {
+      background: rgba(40,30,64,.76); border-color: rgba(255,255,255,.08);
+    }
+    .metric-label { display: flex; align-items: center; gap: 11px; color: #65708e; font-size: 13px; font-weight: 600; }
+    .round-icon {
+      width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%;
+      font-size: 22px; box-shadow: 0 5px 16px rgba(99,70,190,.16);
+    }
+    .sleep-icon { color: #8447f1; background: #eee1ff; }
+    .water-icon { background: #e2f2ff; }
+    .sleep-body { margin-top: 33px; display: flex; align-items: center; gap: 24px; }
+    .sleep-ring {
+      width: 79px; height: 79px; border-radius: 50%;
+      background: conic-gradient(#6033d9 0 35%, #9a6ee9 35% 76%, #ded6f5 76%);
+      position: relative;
+    }
+    .sleep-ring::after {
+      content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--card);
+    }
+    .sleep-time strong { display: block; font-size: 21px; line-height: 1.4; }
+    .sleep-time span { color: #858ca6; font-size: 13px; }
+    .water-value { margin: 32px 0 14px; font-size: 22px; font-weight: 700; }
+    .water-dots { display: grid; grid-template-columns: repeat(5, 22px); gap: 10px; }
+    .water-dot { width: 22px; height: 22px; border-radius: 50%; background: #e6e8f0; }
+    .water-dot.filled { background: linear-gradient(#7bc8ff, #4da5e9); }
+    .water-dot.pale { background: #cbe6fb; }
+    .mood-card {
+      margin-top: 18px; padding: 24px 18px 26px; border-radius: 20px;
+      background: rgba(255,255,255,.65); border: 1px solid rgba(255,255,255,.85);
+    }
+    .mood-title { display: flex; justify-content: space-between; color: #65708e; font-size: 13px; font-weight: 600; }
+    .mood-title span:last-child { color: #9097ad; font-size: 12px; font-weight: 400; }
+    .moods { display: flex; justify-content: space-around; gap: 12px; margin-top: 24px; }
+    .mood {
+      width: 60px; height: 60px; border: 1px solid #edf0f5; border-radius: 16px;
+      display: grid; place-items: center; background: rgba(249,249,252,.9);
+      font-size: 29px; cursor: pointer; transition: .18s;
+    }
+    .mood:hover { transform: translateY(-3px); }
+    .mood.selected { border: 2px solid #914cff; box-shadow: 0 0 0 3px rgba(145,76,255,.12); }
+    .message-card {
+      position: relative; height: 96px; margin-top: 20px; padding: 22px 50px 15px 123px;
+      border-radius: 21px; background: rgba(255,255,255,.7); border: 1px solid rgba(133,96,227,.18);
+    }
+    .mini-guardian { position: absolute; left: 15px; bottom: 0; transform: scale(.34); transform-origin: bottom left; }
+    .mini-guardian.guardian { width: 300px; height: 270px; }
+    .message-card strong { display: block; font-size: 17px; }
+    .message-card p { margin: 4px 0 0; color: #77809c; font-size: 15px; }
+    .message-heart { position: absolute; right: 26px; top: 34px; color: #8c4af0; font-size: 28px; }
+
+    .features {
+      position: relative; z-index: 5; margin-top: -2px; padding: 31px 0 38px;
+      border: 1px solid rgba(95,73,180,.1); border-radius: 30px 30px 0 0;
+      background: rgba(255,255,255,.94); box-shadow: 0 -15px 50px rgba(102,70,174,.05);
+    }
+    [data-theme="dark"] .features { background: rgba(18,13,32,.96); }
+    .section-inner { width: min(1240px, calc(100% - 48px)); margin: auto; }
+    .features-heading { text-align: center; }
+    .features-kicker { color: #7664ad; font-size: 12px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+    .features-kicker span { color: #e16cb4; }
+    .features h2 { margin: 10px 0 7px; font: 700 29px "Playfair Display", serif; }
+    .features-heading p { margin: 0; color: var(--muted); font-size: 14px; }
+    .feature-grid { margin-top: 31px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .feature-card {
+      position: relative; min-height: 168px; overflow: hidden; padding: 24px 20px;
+      border-radius: 20px; border: 1px solid var(--line);
+    }
+    .feature-card.sleep { background: linear-gradient(135deg, #fbf8ff, #f1e9ff); }
+    .feature-card.water { background: linear-gradient(135deg, #fbfdff, #edf5ff); }
+    .feature-card.mood-card-feature { background: linear-gradient(135deg, #fffafd, #ffedf7); }
+    .feature-card.reminder { background: linear-gradient(135deg, #fffdf9, #fff4e9); }
+    [data-theme="dark"] .feature-card { background: linear-gradient(135deg, #241a3b, #1a142d); }
+    .feature-top { display: flex; align-items: flex-start; gap: 14px; }
+    .feature-icon {
+      flex: 0 0 auto; width: 48px; height: 48px; display: grid; place-items: center;
+      border-radius: 50%; font-size: 24px; background: rgba(255,255,255,.68);
+      box-shadow: 0 5px 16px rgba(84,61,145,.1);
+    }
+    .feature-card h3 { margin: 5px 0 7px; font-size: 14px; }
+    .feature-card p { margin: 0; max-width: 150px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .card-bot {
+      position: absolute; right: 14px; bottom: -29px; width: 95px; height: 90px;
+      border-radius: 48% 48% 43% 43%; background: linear-gradient(145deg, white, #e8e7e9);
+      box-shadow: inset -8px -7px 12px rgba(90,83,98,.08), 0 10px 20px rgba(80,60,120,.12);
+    }
+    .card-bot::before {
+      content: ""; position: absolute; left: 25px; top: -25px; width: 55px; height: 43px;
+      border-radius: 50%; background: linear-gradient(145deg, white, #e8e7e9);
+    }
+    .card-bot::after {
+      content: "●──●"; position: absolute; left: 31px; top: -10px;
+      color: #151515; font-size: 8px; letter-spacing: -1px;
+    }
+    .bot-prop { position: absolute; left: 28px; top: 35px; font-size: 34px; }
+    .cloud {
+      position: absolute; right: -20px; bottom: -7px; width: 150px; height: 48px;
+      border-radius: 50px; background: #c9b0ff; filter: drop-shadow(0 8px 8px rgba(101,65,190,.14));
+    }
+    .cloud::before, .cloud::after { content:""; position:absolute; border-radius:50%; background:inherit; }
+    .cloud::before { width: 65px; height: 65px; left: 20px; top: -28px; }
+    .cloud::after { width: 75px; height: 75px; right: 11px; top: -37px; }
+    .cloud-face { position: absolute; z-index: 2; right: 42px; bottom: 25px; font-size: 12px; color: #1b1830; }
+
+    .about, .contact { padding: 95px 24px; text-align: center; }
+    .about h2, .contact h2 { font: 700 38px "Playfair Display", serif; margin: 0 0 14px; }
+    .about p, .contact p { max-width: 680px; margin: auto; color: var(--muted); line-height: 1.8; }
+    .contact { background: linear-gradient(135deg, rgba(239,230,255,.55), rgba(255,238,247,.55)); }
+
+    #progressBar {
+      position: fixed; inset: 0 auto auto 0; z-index: 100;
+      width: 0; height: 3px; background: linear-gradient(90deg, #7a3cf1, #df6eb3);
+    }
+    .mobile-menu {
+      position: fixed; inset: 72px 0 auto; z-index: 49; display: none;
+      padding: 16px; background: var(--card); border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow); backdrop-filter: blur(20px);
+    }
+    .mobile-menu.open { display: grid; }
+    .mobile-menu a { padding: 13px 18px; border-radius: 12px; font-weight: 600; }
+    .mobile-menu a:hover { background: rgba(130,74,235,.1); color: var(--purple); }
+    .content-section { position: relative; padding: 92px 24px; overflow: hidden; }
+    .content-section.alt { background: linear-gradient(135deg, rgba(245,240,255,.7), rgba(255,244,249,.62)); }
+    [data-theme="dark"] .content-section.alt, [data-theme="dark"] .contact {
+      background: linear-gradient(135deg, rgba(35,25,57,.86), rgba(39,19,39,.7));
+    }
+    .content-inner { width: min(1120px, 100%); margin: auto; }
+    .section-head { max-width: 700px; margin: 0 auto 45px; text-align: center; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px;
+      border-radius: 999px; color: #7f46dc; background: rgba(235,220,255,.65);
+      font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .section-head h2, .split-copy h2, .download-copy h2 {
+      margin: 13px 0; font: 700 clamp(32px,4vw,45px)/1.15 "Playfair Display", serif;
+    }
+    .section-head p, .split-copy > p, .download-copy > p { color: var(--muted); line-height: 1.75; }
+    .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 65px; align-items: center; }
+    .about-visual {
+      min-height: 410px; position: relative; display: grid; place-items: center;
+      border-radius: 36px; background: radial-gradient(circle, #f1d9ff, #e8e9ff 57%, transparent 58%);
+    }
+    .about-guardian { position: relative; width: 245px; height: 250px; }
+    .about-guardian .guardian { left: -43px; bottom: -94px; transform: scale(.72); }
+    .stat-card {
+      position: absolute; padding: 13px 17px; border: 1px solid rgba(255,255,255,.8);
+      border-radius: 16px; background: var(--card); box-shadow: var(--shadow);
+      font-size: 13px; font-weight: 700;
+    }
+    .stat-card small { display: block; color: var(--muted); font-weight: 400; }
+    .stat-one { left: 10px; top: 52px; } .stat-two { right: 4px; bottom: 52px; }
+    .pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+    .pillar-card, .full-feature, .access-card, .benefit-card, .testimonial-card {
+      padding: 22px; border: 1px solid var(--line); border-radius: 20px;
+      background: var(--card); box-shadow: 0 10px 35px rgba(72,45,134,.06);
+    }
+    .pillar-card span, .access-card span, .benefit-card span { font-size: 25px; }
+    .pillar-card h3, .access-card h3, .benefit-card h3 { margin: 8px 0 5px; font-size: 16px; }
+    .pillar-card p, .access-card p, .benefit-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .full-features-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+    .full-feature { min-height: 310px; display: flex; flex-direction: column; }
+    .full-feature h3 { margin: 14px 0 8px; }
+    .full-feature > p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .demo-box {
+      margin-top: auto; padding: 15px; border-radius: 15px;
+      background: rgba(238,232,250,.55); border: 1px solid var(--line);
+    }
+    [data-theme="dark"] .demo-box { background: rgba(20,14,35,.48); }
+    .demo-label { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .progress-track { height: 7px; margin-top: 11px; overflow: hidden; border-radius: 8px; background: #ddd8e9; }
+    .progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg,#7741ed,#b17bf8); }
+    .sos-button {
+      position: relative; width: 100%; margin-top: 10px; padding: 12px; overflow: hidden;
+      border: 0; border-radius: 12px; color: white; background: #ed4d5d; font-weight: 700;
+      cursor: pointer; user-select: none;
+    }
+    .sos-button::before {
+      content: ""; position: absolute; inset: 0; width: var(--hold,0%);
+      background: rgba(101,0,10,.3); transition: width .05s linear;
+    }
+    .sos-button span { position: relative; }
+    .access-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .benefit-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; }
+    .benefit-card { text-align: center; padding: 20px 14px; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .stars { color: #f3ad2e; letter-spacing: 3px; }
+    .quote { color: var(--muted); font-size: 14px; line-height: 1.75; font-style: italic; }
+    .author { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+    .avatar {
+      width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%;
+      color: white; background: linear-gradient(135deg,#7940ed,#ae7cff); font-weight: 700;
+    }
+    .author small { display: block; color: var(--muted); }
+    .faq-list { max-width: 790px; margin: auto; display: grid; gap: 12px; }
+    .faq-item { border: 1px solid var(--line); border-radius: 17px; background: var(--card); overflow: hidden; }
+    .faq-question {
+      width: 100%; padding: 20px; display: flex; justify-content: space-between; gap: 15px;
+      border: 0; background: transparent; text-align: left; font-weight: 700; cursor: pointer;
+    }
+    .faq-chevron { transition: transform .2s; }
+    .faq-question[aria-expanded="true"] .faq-chevron { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+    .faq-answer p { margin: 0; padding: 0 20px 20px; color: var(--muted); line-height: 1.7; }
+    .download-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; align-items: center; }
+    .store-row { display: flex; gap: 13px; margin: 24px 0; }
+    .store-button {
+      min-width: 170px; padding: 12px 18px; display: flex; align-items: center; gap: 10px;
+      border: 1px solid var(--line); border-radius: 14px; color: white; background: #15121e; cursor: pointer;
+    }
+    .store-button small { display: block; opacity: .7; } .store-button strong { display: block; }
+    .check-list { padding: 0; list-style: none; display: grid; gap: 10px; color: var(--muted); }
+    .check-list li::before { content: "✓"; margin-right: 10px; color: #7e42e8; font-weight: 800; }
+    .phone {
+      width: 270px; height: 530px; margin: auto; padding: 12px; border-radius: 42px;
+      background: #17131d; box-shadow: 0 30px 65px rgba(51,28,94,.25);
+    }
+    .phone-screen {
+      height: 100%; padding: 24px 16px; border-radius: 33px;
+      background: linear-gradient(155deg,#fbf8ff,#ede4ff);
+    }
+    .phone-notch { width: 92px; height: 22px; margin: -17px auto 24px; border-radius: 0 0 15px 15px; background: #17131d; }
+    .phone-widget { margin: 12px 0; padding: 15px; border-radius: 16px; background: rgba(255,255,255,.78); color: #17132e; }
+    .phone-widget strong { display: block; margin-top: 5px; }
+    .contact-card { width: min(620px,100%); margin: 35px auto 0; text-align: left; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 700; }
+    .field input, .field textarea {
+      width: 100%; padding: 14px 15px; border: 1px solid var(--line); border-radius: 13px;
+      color: var(--ink); background: var(--card); font: inherit; outline: none;
+    }
+    .field input:focus, .field textarea:focus { border-color: #8748e9; box-shadow: 0 0 0 3px rgba(135,72,233,.12); }
+    .field textarea { min-height: 125px; resize: vertical; }
+    .form-status { display: none; margin-top: 15px; padding: 12px; border-radius: 12px; color: #22663b; background: #e5f8ec; }
+    .form-status.show { display: block; }
+    footer { padding: 60px 24px 25px; background: #100c1c; color: #f6f1ff; }
+    .footer-inner { width: min(1120px,100%); margin: auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr repeat(3,1fr); gap: 45px; }
+    .footer-brand p, .footer-col a { color: #aaa2bc; font-size: 13px; line-height: 1.7; }
+    .footer-col { display: grid; align-content: start; gap: 9px; }
+    .footer-col h3 { margin: 0 0 7px; font-size: 14px; }
+    .footer-bottom { margin-top: 40px; padding-top: 20px; display: flex; justify-content: space-between; border-top: 1px solid #2c243c; color: #817990; font-size: 12px; }
+    .toast {
+      position: fixed; left: 50%; bottom: 28px; z-index: 110; padding: 13px 20px;
+      border-radius: 999px; color: white; background: #241a39; box-shadow: var(--shadow);
+      transform: translate(-50%,120px); opacity: 0; transition: .25s;
+    }
+    .toast.show { transform: translate(-50%,0); opacity: 1; }
+    [data-dyslexia="true"] body { font-family: Verdana, Arial, sans-serif; letter-spacing: .035em; line-height: 1.8; }
+    [data-high-contrast="true"] { --ink:#000; --muted:#231642; --page:#fff; --card:#fff; --line:#4c00ad; }
+    [data-high-contrast="true"][data-theme="dark"] { --ink:#fff; --muted:#f0e6ff; --page:#000; --card:#090011; --line:#d0b4ff; }
+    [data-calm="true"] .guardian, [data-calm="true"] .spark, [data-calm="true"] .card-bot,
+    [data-calm="true"] .cloud, [data-calm="true"] .about-visual { display: none; }
+    [data-reduce-motion="true"] *, [data-reduce-motion="true"] *::before, [data-reduce-motion="true"] *::after {
+      scroll-behavior: auto !important; transition: none !important; animation: none !important;
+    }
+    .switch {
+      width: 42px; height: 24px; padding: 2px; border: 1px solid var(--line);
+      border-radius: 999px; background: #ddd8e7; cursor: pointer;
+    }
+    .switch::after { content:""; display:block; width:18px; height:18px; border-radius:50%; background:white; transition:.2s; }
+    .switch.on { background: #8244ed; } .switch.on::after { transform: translateX(18px); }
+
+    .a11y-fab {
+      position: fixed; right: 24px; bottom: 24px; z-index: 80;
+      width: 58px; height: 58px; border: 0; border-radius: 50%;
+      color: white; background: linear-gradient(135deg, #8e4bff, #6d2ee9);
+      box-shadow: 0 10px 24px rgba(103,44,222,.32); font-size: 26px; cursor: pointer;
+    }
+    .a11y-panel {
+      position: fixed; right: 24px; bottom: 94px; z-index: 81; width: 290px;
+      padding: 20px; border: 1px solid var(--line); border-radius: 22px;
+      background: var(--card); box-shadow: var(--shadow); backdrop-filter: blur(22px);
+      transform: translateY(16px); opacity: 0; pointer-events: none; transition: .2s;
+    }
+    .a11y-panel.open { transform: none; opacity: 1; pointer-events: auto; }
+    .a11y-panel h3 { margin: 0 0 15px; font-size: 17px; }
+    .a11y-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 14px; }
+    .small-btn { border: 1px solid var(--line); border-radius: 9px; background: var(--page); padding: 6px 10px; cursor: pointer; }
+
+    @media (max-width: 1000px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .hero { min-height: auto; }
+      .hero-grid { grid-template-columns: 1fr; padding-bottom: 70px; }
+      .hero-copy { padding-bottom: 320px; }
+      .wellness-panel { width: min(620px, 100%); margin: auto; }
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+      .full-features-grid, .benefit-grid { grid-template-columns: 1fr 1fr; }
+      .access-grid, .testimonial-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid, .download-grid { grid-template-columns: 1fr; }
+      .about-visual { min-height: 340px; }
+    }
+    @media (max-width: 650px) {
+      .nav { height: 72px; }
+      .nav-inner, .hero-grid, .section-inner { width: min(100% - 28px, 1200px); }
+      .brand-name { font-size: 20px; }
+      .brand-mark { width: 42px; height: 42px; }
+      .access-button span:last-child, .moon-button { display: none; }
+      .access-button { padding: 10px; }
+      .hero-grid { padding-top: 40px; gap: 32px; }
+      .hero-copy { padding-bottom: 235px; }
+      h1 { font-size: 46px; letter-spacing: -1.8px; }
+      .lead { font-size: 16px; }
+      .hero-buttons { flex-direction: column; align-items: stretch; gap: 12px; }
+      .guardian { left: 50%; bottom: -151px; transform: translateX(-50%) scale(.78); }
+      .spark { display: none; }
+      .wellness-panel { padding: 20px; border-radius: 28px; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .metric-card { min-height: 180px; }
+      .moods { gap: 7px; }
+      .mood { width: 48px; height: 52px; font-size: 24px; }
+      .message-card { padding-left: 104px; padding-right: 32px; }
+      .message-card p { font-size: 13px; }
+      .message-heart { display: none; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .feature-card { min-height: 155px; }
+      .content-section { padding: 70px 15px; }
+      .full-features-grid, .access-grid, .benefit-grid, .testimonial-grid, .pillar-grid { grid-template-columns: 1fr; }
+      .store-row { flex-direction: column; }
+      .store-button { width: 100%; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { flex-direction: column; gap: 8px; }
+      .a11y-panel { left: 14px; right: 14px; width: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progressBar" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="#home" aria-label="MyGuardian home">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-face"><span class="face-line"></span></span>
+        </span>
+        <span class="brand-name">MyGuardian</span>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#accessibility">Accessibility</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-switch" id="themeSwitch" aria-label="Toggle dark mode"><span></span></button>
+        <button class="moon-button" id="moonButton" aria-label="Toggle dark mode">◕</button>
+        <button class="access-button" id="accessButton" aria-expanded="false">
+          <span class="access-icon" aria-hidden="true">♿</span><span>Accessibility</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="#home">Home</a><a href="#about">About</a><a href="#features">Features</a>
+    <a href="#accessibility">Accessibility</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> New&nbsp;&nbsp; Launching 2025</div>
+          <h1>Your wellness,<span class="gradient-line">my priority. <span class="heart-outline">♡</span></span></h1>
+          <p class="lead">MyGuardian is your personal wellness companion that helps you build healthier habits, understand your mood, and take care of you—every day.</p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#features"><span aria-hidden="true">⇩</span> Explore Features</a>
+            <button class="btn btn-secondary" id="demoButton">View Demo <span class="play">▶</span></button>
+          </div>
+
+          <div class="guardian" aria-hidden="true">
+            <div class="g-arm wave"></div><div class="g-arm side"></div>
+            <div class="g-body"><span class="g-heart">♡</span></div>
+            <div class="g-head"><span class="g-eye left"></span><span class="g-line"></span><span class="g-eye right"></span></div>
+          </div>
+          <span class="spark s1" aria-hidden="true">✦</span><span class="spark s2" aria-hidden="true">✦</span><span class="spark s3" aria-hidden="true">✦</span>
+        </div>
+
+        <div class="wellness-panel" aria-label="Today's wellness summary">
+          <div class="panel-heading"><h2>Today's Wellness</h2><span class="panel-date" id="panelDate">5 Jun</span></div>
+          <div class="metric-grid">
+            <article class="metric-card">
+              <div class="metric-label"><span class="round-icon sleep-icon">◔</span> SLEEP</div>
+              <div class="sleep-body">
+                <div class="sleep-ring" aria-label="Sleep progress, 7 hours 45 minutes of 8 hours"></div>
+                <div class="sleep-time"><strong>7h<br>45m</strong><span>Goal: 8 hrs</span></div>
+              </div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label"><span class="round-icon water-icon">💧</span> HYDRATION</div>
+              <div class="water-value">6 / 8</div>
+              <div class="water-dots" aria-label="Six of eight glasses complete">
+                <i class="water-dot filled"></i><i class="water-dot filled"></i><i class="water-dot filled"></i><i class="water-dot filled"></i><i class="water-dot filled"></i>
+                <i class="water-dot pale"></i><i class="water-dot"></i><i class="water-dot"></i>
+              </div>
+            </article>
+          </div>
+
+          <div class="mood-card">
+            <div class="mood-title"><span>MOOD CHECK-IN</span><span>How are you feeling?</span></div>
+            <div class="moods" role="group" aria-label="Choose your mood">
+              <button class="mood" aria-label="Tired">😴</button>
+              <button class="mood" aria-label="Unsure">😐</button>
+              <button class="mood selected" aria-label="Happy">😊</button>
+              <button class="mood" aria-label="Great">😄</button>
+              <button class="mood" aria-label="Loved">😍</button>
+            </div>
+          </div>
+
+          <div class="message-card">
+            <div class="guardian mini-guardian" aria-hidden="true">
+              <div class="g-arm side"></div><div class="g-body"></div>
+              <div class="g-head"><span class="g-eye left"></span><span class="g-line"></span><span class="g-eye right"></span></div>
+            </div>
+            <strong id="moodMessage">You're doing great today!</strong>
+            <p>Small steps, better days.</p>
+            <span class="message-heart" aria-hidden="true">♥</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="section-inner">
+        <div class="features-heading">
+          <div class="features-kicker"><span>♥</span>&nbsp; Built for you</div>
+          <h2>Everything you need for a better you</h2>
+          <p>Simple tools to help you sleep better, stay hydrated, and feel your best.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card sleep">
+            <div class="feature-top"><span class="feature-icon">◔</span><div><h3>Sleep Better</h3><p>Track your sleep and build a restful routine.</p></div></div>
+            <div class="cloud"></div><span class="cloud-face">●──●</span>
+          </article>
+          <article class="feature-card water">
+            <div class="feature-top"><span class="feature-icon">💧</span><div><h3>Stay Hydrated</h3><p>Drink more water and feel energized.</p></div></div>
+            <div class="card-bot"><span class="bot-prop">🥤</span></div>
+          </article>
+          <article class="feature-card mood-card-feature">
+            <div class="feature-top"><span class="feature-icon">♥</span><div><h3>Track Your Mood</h3><p>Understand your feelings and grow emotionally.</p></div></div>
+            <div class="card-bot"><span class="bot-prop">💗</span></div>
+          </article>
+          <article class="feature-card reminder">
+            <div class="feature-top"><span class="feature-icon">🔔</span><div><h3>Smart Reminders</h3><p>Gentle nudges to keep you on track.</p></div></div>
+            <div class="card-bot"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="about">
+      <div class="content-inner about-grid">
+        <div class="about-visual" aria-hidden="true">
+          <div class="about-guardian">
+            <div class="guardian"><div class="g-arm wave"></div><div class="g-arm side"></div><div class="g-body"><span class="g-heart">♡</span></div><div class="g-head"><span class="g-eye left"></span><span class="g-line"></span><span class="g-eye right"></span></div></div>
+          </div>
+          <div class="stat-card stat-one">✓ 2,400+ habits tracked<small>this week alone</small></div>
+          <div class="stat-card stat-two">★ Accessibility first<small>WCAG-conscious design</small></div>
+        </div>
+        <div class="split-copy">
+          <div class="section-tag">About MyGuardian</div>
+          <h2>Wellness that fits <em>your</em> life</h2>
+          <p>MyGuardian helps you maintain healthy routines through wellness monitoring and habit awareness, designed with simplicity and inclusivity at its core.</p>
+          <div class="pillar-grid">
+            <article class="pillar-card"><span>✨</span><h3>Simplicity</h3><p>A clean, intuitive interface with zero clutter.</p></article>
+            <article class="pillar-card"><span>💚</span><h3>Wellness</h3><p>A holistic view of your daily health habits.</p></article>
+            <article class="pillar-card"><span>🔄</span><h3>Consistency</h3><p>Build lasting routines with gentle reminders.</p></article>
+            <article class="pillar-card"><span>🤝</span><h3>Inclusive</h3><p>Designed for people with different needs.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section alt" aria-labelledby="coreFeaturesHeading">
+      <div class="content-inner">
+        <header class="section-head"><div class="section-tag">Interactive tools</div><h2 id="coreFeaturesHeading">Everything you need to thrive</h2><p>Track the essentials and reach help quickly when it matters.</p></header>
+        <div class="full-features-grid">
+          <article class="full-feature"><span class="feature-icon">🌙</span><h3>Sleep Tracking</h3><p>Monitor rest goals and improve your nightly routine.</p><div class="demo-box"><span class="demo-label">Tonight's goal</span><strong>7h 45m / 8h</strong><div class="progress-track"><div class="progress-fill" style="width:97%"></div></div></div></article>
+          <article class="full-feature"><span class="feature-icon">💧</span><h3>Water Tracking</h3><p>Stay hydrated with quick logging and daily progress.</p><div class="demo-box"><span class="demo-label">Today's hydration</span><strong id="waterCount">6 of 8 glasses</strong><button class="small-btn" id="addWater" style="margin-top:10px">+ Add a glass</button></div></article>
+          <article class="full-feature"><span class="feature-icon">☀️</span><h3>Mood Tracking</h3><p>Notice patterns in how you feel across your week.</p><div class="demo-box"><span class="demo-label">Positive streak</span><strong id="streakValue">3 days ✨</strong><button class="small-btn" id="saveCheckin" style="margin-top:10px">Save check-in</button></div></article>
+          <article class="full-feature"><span class="feature-icon">🆘</span><h3>SOS Support</h3><p>A deliberate press-and-hold control for emergency access.</p><div class="demo-box"><span class="demo-label">Emergency demo</span><button class="sos-button" id="sosButton"><span>Hold for SOS</span></button></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="accessibility">
+      <div class="content-inner">
+        <header class="section-head"><div class="section-tag">Accessibility</div><h2>Built for <em>everyone</em></h2><p>Use the accessibility button to try every preference live. Your choices are saved on this device.</p></header>
+        <div class="access-grid">
+          <article class="access-card"><span>🔠</span><h3>Adjustable Text Size</h3><p>Increase or decrease text for comfortable reading.</p></article>
+          <article class="access-card"><span>📖</span><h3>Dyslexia-Friendly Mode</h3><p>Readable type, spacing, and generous line height.</p></article>
+          <article class="access-card"><span>🎨</span><h3>High Contrast</h3><p>Sharper color separation for low-vision users.</p></article>
+          <article class="access-card"><span>🎭</span><h3>Reduced Motion</h3><p>Turns off transitions and animated movement.</p></article>
+          <article class="access-card"><span>🌙</span><h3>Dark & Light Mode</h3><p>Switch themes for your lighting preference.</p></article>
+          <article class="access-card"><span>🧘</span><h3>Calm Mode</h3><p>Hides decorative elements for less distraction.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section alt" id="benefits">
+      <div class="content-inner">
+        <header class="section-head"><div class="section-tag">Benefits</div><h2>Why users love MyGuardian</h2></header>
+        <div class="benefit-grid">
+          <article class="benefit-card"><span>🔁</span><h3>Better Habits</h3><p>Small actions become lasting routines.</p></article>
+          <article class="benefit-card"><span>🩺</span><h3>Awareness</h3><p>See your wellness metrics at a glance.</p></article>
+          <article class="benefit-card"><span>💪</span><h3>Motivation</h3><p>Gentle encouragement keeps you moving.</p></article>
+          <article class="benefit-card"><span>🚨</span><h3>Readiness</h3><p>Emergency support offers peace of mind.</p></article>
+          <article class="benefit-card"><span>📊</span><h3>Insights</h3><p>Understand patterns across your week.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="testimonials">
+      <div class="content-inner">
+        <header class="section-head"><div class="section-tag">Testimonials</div><h2>Voices from our community</h2></header>
+        <div class="testimonial-grid">
+          <article class="testimonial-card"><div class="stars">★★★★★</div><p class="quote">“The sleep tracking helped me reshape my mornings. The calm design makes checking in feel effortless.”</p><div class="author"><span class="avatar">P</span><strong>Priya S.<small>Healthcare professional</small></strong></div></article>
+          <article class="testimonial-card"><div class="stars">★★★★★</div><p class="quote">“The dyslexia-friendly settings make the app genuinely readable, and hydration reminders help on long workdays.”</p><div class="author"><span class="avatar">M</span><strong>Marcus T.<small>Software engineer</small></strong></div></article>
+          <article class="testimonial-card"><div class="stars">★★★★★</div><p class="quote">“Mood check-ins helped me connect sleep, hydration, and energy. SOS also gives our family extra confidence.”</p><div class="author"><span class="avatar">A</span><strong>Aisha K.<small>Wellness coach</small></strong></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section alt" id="faq">
+      <div class="content-inner">
+        <header class="section-head"><div class="section-tag">FAQ</div><h2>Common questions</h2></header>
+        <div class="faq-list">
+          <article class="faq-item"><button class="faq-question" aria-expanded="false">What is MyGuardian?<span class="faq-chevron">＋</span></button><div class="faq-answer"><p>A personal wellness companion for sleep, hydration, mood, reminders, and quick SOS access.</p></div></article>
+          <article class="faq-item"><button class="faq-question" aria-expanded="false">Is MyGuardian free to use?<span class="faq-chevron">＋</span></button><div class="faq-answer"><p>The planned product includes a free core tier, with optional advanced insights in a premium plan.</p></div></article>
+          <article class="faq-item"><button class="faq-question" aria-expanded="false">How does mood tracking work?<span class="faq-chevron">＋</span></button><div class="faq-answer"><p>Simple emoji check-ins help reveal patterns between your mood, sleep, and hydration over time.</p></div></article>
+          <article class="faq-item"><button class="faq-question" aria-expanded="false">Can accessibility settings be customized?<span class="faq-chevron">＋</span></button><div class="faq-answer"><p>Yes. Text size, dyslexia font, contrast, reduced motion, calm mode, and theme are all configurable and saved locally.</p></div></article>
+          <article class="faq-item"><button class="faq-question" aria-expanded="false">Is MyGuardian mobile friendly?<span class="faq-chevron">＋</span></button><div class="faq-answer"><p>Yes. This page is responsive, and the planned mobile apps will support notifications and health integrations.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="download">
+      <div class="content-inner download-grid">
+        <div class="download-copy"><div class="section-tag">Launching soon</div><h2>Take control of your wellness today</h2><p>Simple tracking, gentle reminders, helpful insights, accessibility preferences, and personal safety in one companion.</p>
+          <div class="store-row"><button class="store-button" data-store="App Store"><span>●</span><span><small>Download on the</small><strong>App Store</strong></span></button><button class="store-button" data-store="Google Play"><span>▶</span><span><small>Get it on</small><strong>Google Play</strong></span></button></div>
+          <ul class="check-list"><li>Simple daily tracking</li><li>Personalized wellness insights</li><li>Accessibility-first design</li><li>Emergency SOS support</li><li>Dark and light mode</li></ul>
+        </div>
+        <div class="phone" aria-label="Mobile app preview"><div class="phone-screen"><div class="phone-notch"></div><h3>MyGuardian</h3><div class="phone-widget">🌙 Sleep<strong>7h 45m</strong></div><div class="phone-widget">💧 Hydration<strong>6 / 8 glasses</strong></div><div class="phone-widget">😊 Mood<strong>Feeling great</strong></div><div class="phone-widget">📊 Weekly progress<strong>87%</strong></div></div></div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2>Get in touch</h2><p>Have questions, feedback, or want to learn more? We would love to hear from you.</p>
+      <form class="contact-card" id="contactForm" novalidate>
+        <div class="field"><label for="contactName">Your name</label><input id="contactName" name="name" autocomplete="name" required placeholder="Jane Smith"></div>
+        <div class="field"><label for="contactEmail">Email address</label><input id="contactEmail" name="email" type="email" autocomplete="email" required placeholder="jane@example.com"></div>
+        <div class="field"><label for="contactMessage">Message</label><textarea id="contactMessage" name="message" required placeholder="Tell us what's on your mind..."></textarea></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Send message →</button>
+        <div class="form-status" id="formStatus" role="status">Thanks! Your message has been validated in this local demo.</div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner"><div class="footer-grid"><div><a class="brand" href="#home"><span class="brand-name">MyGuardian</span></a><p class="footer-brand">Your personal wellness companion for healthier daily habits. Built with care, designed for everyone.</p></div><div class="footer-col"><h3>Product</h3><a href="#features">Features</a><a href="#accessibility">Accessibility</a><a href="#download">Download</a><a href="#faq">FAQ</a></div><div class="footer-col"><h3>Company</h3><a href="#about">About</a><a href="#testimonials">Testimonials</a><a href="#contact">Contact</a></div><div class="footer-col"><h3>Legal</h3><a href="#accessibility">Accessibility statement</a><a href="#contact">Privacy questions</a><a href="#contact">Terms</a></div></div><div class="footer-bottom"><span>© 2026 MyGuardian. All rights reserved.</span><span>Made with care for everyone.</span></div></div>
+  </footer>
+
+  <aside class="a11y-panel" id="a11yPanel" aria-label="Accessibility settings">
+    <h3>Accessibility settings</h3>
+    <div class="a11y-row"><span>Text size</span><span><button class="small-btn" id="textDown" aria-label="Decrease text size">A−</button> <span id="fontValue">100%</span> <button class="small-btn" id="textUp" aria-label="Increase text size">A+</button></span></div>
+    <div class="a11y-row"><span>Theme</span><button class="small-btn" id="panelTheme">Toggle</button></div>
+    <div class="a11y-row"><span>Dyslexia-friendly</span><button class="switch" id="dyslexiaSwitch" role="switch" aria-checked="false"></button></div>
+    <div class="a11y-row"><span>High contrast</span><button class="switch" id="contrastSwitch" role="switch" aria-checked="false"></button></div>
+    <div class="a11y-row"><span>Reduce motion</span><button class="switch" id="motionSwitch" role="switch" aria-checked="false"></button></div>
+    <div class="a11y-row"><span>Calm mode</span><button class="switch" id="calmSwitch" role="switch" aria-checked="false"></button></div>
+  </aside>
+  <button class="a11y-fab" id="a11yFab" aria-label="Open accessibility settings">♿</button>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const root = document.documentElement;
+    const panel = document.getElementById("a11yPanel");
+    const accessButton = document.getElementById("accessButton");
+    const toast = document.getElementById("toast");
+    const moodMessages = [
+      "Rest is productive too.",
+      "Take today one step at a time.",
+      "You're doing great today!",
+      "Your energy is shining today!",
+      "Keep sharing that warm heart!"
+    ];
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function toggleTheme() {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      localStorage.setItem("myguardian-theme", next);
+    }
+
+    const savedTheme = localStorage.getItem("myguardian-theme");
+    if (savedTheme) root.dataset.theme = savedTheme;
+    else if (matchMedia("(prefers-color-scheme: dark)").matches) root.dataset.theme = "dark";
+
+    document.getElementById("themeSwitch").addEventListener("click", toggleTheme);
+    document.getElementById("moonButton").addEventListener("click", toggleTheme);
+    document.getElementById("panelTheme").addEventListener("click", toggleTheme);
+
+    function togglePanel() {
+      panel.classList.toggle("open");
+      accessButton.setAttribute("aria-expanded", panel.classList.contains("open"));
+    }
+    accessButton.addEventListener("click", togglePanel);
+    document.getElementById("a11yFab").addEventListener("click", togglePanel);
+
+    let baseSize = Number(localStorage.getItem("myguardian-font-size")) || 16;
+    root.style.fontSize = baseSize + "px";
+    document.getElementById("fontValue").textContent = Math.round(baseSize / 16 * 100) + "%";
+    function updateFontSize(direction) {
+      baseSize = Math.max(13, Math.min(21, baseSize + direction));
+      root.style.fontSize = baseSize + "px";
+      localStorage.setItem("myguardian-font-size", baseSize);
+      document.getElementById("fontValue").textContent = Math.round(baseSize / 16 * 100) + "%";
+    }
+    document.getElementById("textUp").addEventListener("click", () => {
+      updateFontSize(1);
+    });
+    document.getElementById("textDown").addEventListener("click", () => {
+      updateFontSize(-1);
+    });
+
+    const accessibilityOptions = {
+      dyslexia: ["data-dyslexia", "dyslexiaSwitch"],
+      contrast: ["data-high-contrast", "contrastSwitch"],
+      motion: ["data-reduce-motion", "motionSwitch"],
+      calm: ["data-calm", "calmSwitch"]
+    };
+    Object.entries(accessibilityOptions).forEach(([key, [attribute, id]]) => {
+      const control = document.getElementById(id);
+      const enabled = localStorage.getItem("myguardian-" + key) === "true";
+      root.setAttribute(attribute, enabled);
+      control.classList.toggle("on", enabled);
+      control.setAttribute("aria-checked", enabled);
+      control.addEventListener("click", () => {
+        const next = root.getAttribute(attribute) !== "true";
+        root.setAttribute(attribute, next);
+        control.classList.toggle("on", next);
+        control.setAttribute("aria-checked", next);
+        localStorage.setItem("myguardian-" + key, next);
+      });
+    });
+
+    document.querySelectorAll(".mood").forEach((button, index) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".mood").forEach(item => item.classList.remove("selected"));
+        button.classList.add("selected");
+        document.getElementById("moodMessage").textContent = moodMessages[index];
+        localStorage.setItem("myguardian-mood", index);
+      });
+    });
+    const savedMood = Number(localStorage.getItem("myguardian-mood"));
+    if (Number.isInteger(savedMood) && savedMood >= 0 && savedMood < 5) {
+      document.querySelectorAll(".mood").forEach((button, index) => button.classList.toggle("selected", index === savedMood));
+      document.getElementById("moodMessage").textContent = moodMessages[savedMood];
+    }
+
+    document.getElementById("demoButton").addEventListener("click", () => {
+      document.querySelector(".wellness-panel").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    hamburger.addEventListener("click", () => {
+      const open = mobileMenu.classList.toggle("open");
+      hamburger.setAttribute("aria-expanded", open);
+      hamburger.textContent = open ? "×" : "☰";
+    });
+    mobileMenu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        hamburger.textContent = "☰";
+      });
+    });
+
+    const navLinks = [...document.querySelectorAll(".nav-links a")];
+    const trackedSections = [...document.querySelectorAll("main section[id]")];
+    function updateScrollState() {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      document.getElementById("progressBar").style.width = (max > 0 ? scrollY / max * 100 : 0) + "%";
+      let current = "home";
+      trackedSections.forEach(section => {
+        if (scrollY >= section.offsetTop - 140) current = section.id;
+      });
+      navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === "#" + current));
+    }
+    addEventListener("scroll", updateScrollState, { passive: true });
+    updateScrollState();
+
+    document.querySelectorAll(".faq-question").forEach(question => {
+      question.addEventListener("click", () => {
+        const wasOpen = question.getAttribute("aria-expanded") === "true";
+        document.querySelectorAll(".faq-question").forEach(item => {
+          item.setAttribute("aria-expanded", "false");
+          item.nextElementSibling.style.maxHeight = "0px";
+        });
+        if (!wasOpen) {
+          question.setAttribute("aria-expanded", "true");
+          question.nextElementSibling.style.maxHeight = question.nextElementSibling.scrollHeight + "px";
+        }
+      });
+    });
+
+    let water = Number(localStorage.getItem("myguardian-water")) || 6;
+    const waterCount = document.getElementById("waterCount");
+    function renderWater() { waterCount.textContent = water + " of 8 glasses"; }
+    renderWater();
+    document.getElementById("addWater").addEventListener("click", () => {
+      if (water < 8) {
+        water += 1;
+        localStorage.setItem("myguardian-water", water);
+        renderWater();
+        showToast(water === 8 ? "Hydration goal complete!" : "One glass added.");
+      } else showToast("You reached today's hydration goal.");
+    });
+
+    document.getElementById("saveCheckin").addEventListener("click", () => {
+      const streak = Number(localStorage.getItem("myguardian-streak")) || 3;
+      localStorage.setItem("myguardian-streak", streak);
+      document.getElementById("streakValue").textContent = streak + " days ✨";
+      showToast("Today's mood check-in is saved.");
+    });
+
+    const sosButton = document.getElementById("sosButton");
+    let holdStart = 0;
+    let holdFrame;
+    function cancelSos() {
+      cancelAnimationFrame(holdFrame);
+      sosButton.style.setProperty("--hold", "0%");
+      holdStart = 0;
+    }
+    function runSosHold(time) {
+      if (!holdStart) holdStart = time;
+      const progress = Math.min(100, (time - holdStart) / 15);
+      sosButton.style.setProperty("--hold", progress + "%");
+      if (progress >= 100) {
+        cancelSos();
+        showToast("SOS demo activated. No real emergency call was placed.");
+      } else holdFrame = requestAnimationFrame(runSosHold);
+    }
+    ["pointerdown", "keydown"].forEach(eventName => sosButton.addEventListener(eventName, event => {
+      if (eventName === "keydown" && event.key !== " " && event.key !== "Enter") return;
+      event.preventDefault();
+      if (!holdStart) holdFrame = requestAnimationFrame(runSosHold);
+    }));
+    ["pointerup", "pointerleave", "pointercancel", "keyup", "blur"].forEach(eventName => sosButton.addEventListener(eventName, cancelSos));
+
+    document.querySelectorAll("[data-store]").forEach(button => {
+      button.addEventListener("click", () => showToast(button.dataset.store + " launch is coming soon."));
+    });
+
+    document.getElementById("contactForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      document.getElementById("formStatus").classList.add("show");
+      form.reset();
+    });
+
+    document.getElementById("panelDate").textContent =
+      new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(new Date());
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        panel.classList.remove("open");
+        mobileMenu.classList.remove("open");
+        accessButton.setAttribute("aria-expanded", "false");
+        hamburger.setAttribute("aria-expanded", "false");
+        hamburger.textContent = "☰";
+      }
+    });
+  </script>
+</body>
+</html>
